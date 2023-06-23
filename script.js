@@ -1,8 +1,5 @@
 function letterCombinations(digits) {
-
     const digitToLetters = {
-        '0': '0',
-        '1': '1',
         '2': 'abc',
         '3': 'def',
         '4': 'ghi',
@@ -13,24 +10,28 @@ function letterCombinations(digits) {
         '9': 'wxyz'
     };
 
-    function generateCombinations(currentIndex, currentCombination, combinations) {
-        if (currentCombination.length === digits.length) {
-            combinations.push(currentCombination);
+    if (digits.length === 0) {
+        return [];
+    }
+
+    const result = [];
+
+    function backtrack(currentString, nextDigits) {
+        if (nextDigits.length === 0) {
+            result.push(currentString);
             return;
         }
 
-        const letters = digitToLetters[digits[currentIndex]];
+        const letters = digitToLetters[nextDigits[0]];
 
         for (let i = 0; i < letters.length; i++) {
             const letter = letters[i];
-
-            generateCombinations(currentIndex + 1, currentCombination + letter, combinations);
+            backtrack(currentString + letter, nextDigits.slice(1));
         }
     }
 
-    const combinations = [];
-    if (digits.length > 0) {
-        generateCombinations(0, '', combinations);
-    }
-    return combinations.sort();
+    backtrack('', digits);
+    return result.sort();
 }
+
+module.exports = letterCombinations;
